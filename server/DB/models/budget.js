@@ -8,6 +8,10 @@ const budgetSchema = mongoose.Schema({
   car: Number,
   other: Number
 });
+
+const Budget = mongoose.model('Budget', budgetSchema);
+
+module.exports = Budget;
 // {
 //     income: '5000',
 //     rent: '1000',

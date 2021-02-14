@@ -6,17 +6,32 @@ const dev = process.env.NODE_DEV !== 'production'; //true false
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler(); //part of next config
 const db = require('./DB');
+const budget = require('./DB/controllers/budget');
 
 nextApp.prepare().then(() => {
   // express code here
   const app = express();
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  //   app.use('/api/budget', require('./routes/index')) 
   app.post('/api/budget', (req, res) => {
-    console.log(req.body);
+    budget.saveBudget(req.body)
+      .then(() => {
+        res.status(200).end();
+      })
+      .catch(() => {
+        res.status(400).end();
+      });
   });
-
+  app.get('/api/budget', (req, res) => {
+    budget.findAll()
+      .then(resp => {
+        res.send(JSON.stringify(resp));
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(404).end();
+      });
+  });
   app.get('*', (req, res) => {
     return handle(req, res); // for all the react stuff
   });

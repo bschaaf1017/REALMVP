@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/bschaaf1017/REALMVP#readme",
   "dependencies": {
+    "anychart-react": "^1.4.1",
     "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.19.0",
