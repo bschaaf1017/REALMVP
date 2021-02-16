@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
+
+
 export default function BudgetInput() {
+
+  const router = useRouter();
 
   const [name, setName] = useState('');
   const [income, setIncome] = useState('');
@@ -19,8 +24,12 @@ export default function BudgetInput() {
       car: car,
       other: other
     };
-    console.log(money);
-    axios.post('api/budget', money);
+
+    axios.post('api/budget', money)
+      .then(() => {
+        router.push('/budget');
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <form onSubmit={saveBudget}>
@@ -61,7 +70,9 @@ export default function BudgetInput() {
         placeholder="Other"
         onChange={({target}) => setOther(target.value)}
       />
-      <button type="submit">Budget</button>   
+      <br/>
+
+      <button type="submit">Submit</button>   
     </form>
   );
 }

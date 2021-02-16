@@ -1,44 +1,34 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import AnyChart from 'anychart-react';
 
-export default class Chart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  componentDidMount() {
-    axios.get('/api/budget')
-      .then(resp => {
-        console.log(resp.data[0]);
-        this.setState(resp.data[0]);
-      });
-  }
-  render() {
-    let rent = (this.state.rent / this.state.income) * 100;
-    let util = (this.state.utils / this.state.income) * 100;
-    let car = (this.state.car / this.state.income) * 100;
-    let other = (this.state.other / this.state.income) * 100;
-    let unspent = ((this.state.income - this.state.rent - this.state.utils - this.state.car - this.state.other) / this.state.income) * 100;
-    console.log('PERCENT', unspent);
-    return (
-      <div>
+const Chart = (props) => {
 
-        <h2>{this.state.name}'s Budget</h2>
-        <h3>Total Monthly Income: ${this.state.income}</h3>
-        <AnyChart 
-          width={800}
-          height={600}
-          type="pie"
-          data={[
-            {x: `Rent/ Morgage: $${this.state.rent}`, value: rent},
-            {x: `Utilities: $${this.state.utils}`, value: util},
-            {x: `Car Payment: $${this.state.car}`, value: car},
-            {x: `Other: $${this.state.other}`, value: other},
-            {x: `Unspent: $${this.state.income - this.state.rent - this.state.utils - this.state.car - this.state.other}`, value: unspent}
-          ]}
-        />
-      </div>
-    );
-  }
-}
+  let rent = (props.data.rent / props.data.income) * 100;
+  let util = (props.data.utils / props.data.income) * 100;
+  let car = (props.data.car / props.data.income) * 100;
+  let other = (props.data.other / props.data.income) * 100;
+  let unspent = ((props.data.income - props.data.rent - props.data.utils - props.data.car - props.data.other) / props.data.income) * 100;
+  
+  return (
+    <div>
+      <h1>{props.data.name}'s Budget</h1>
+      <h3>Total Monthly Income: ${props.data.income}</h3>
+      <AnyChart 
+        width={800}
+        height={700}
+        type="pie"
+        data={[
+          {x: `Rent/ Morgage: $${props.data.rent}`, value: rent},
+          {x: `Utilities: $${props.data.util}`, value: util},
+          {x: `Car Payment: $${props.data.car}`, value: car},
+          {x: `Other: $${props.data.other}`, value: other},
+          {x: `Unspent: $${props.data.income - props.data.rent - props.data.utils - props.data.car - props.data.other}`, value: unspent}
+        ]}
+      />
+    </div>
+  );
+};
+
+export default Chart;
+      
+
